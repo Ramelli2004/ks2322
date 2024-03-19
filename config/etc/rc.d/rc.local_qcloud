@@ -1,0 +1,19 @@
+#!/bin/bash
+# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
+#
+# It is highly advisable to create own systemd services or udev rules
+# to run scripts during boot instead of using this file.
+#
+# In contrast to previous versions due to parallel execution during boot
+# this script will NOT be run after all other services.
+#
+# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure
+# that this script will be executed during boot.
+
+touch /var/lock/subsys/local
+/usr/local/qcloud/irq/net_smp_affinity.sh >/tmp/net_affinity.log 2>&1
+/usr/local/qcloud/cpuidle/cpuidle_support.sh &> /tmp/cpuidle_support.log
+/usr/local/qcloud/rps/set_rps.sh >/tmp/setRps.log 2>&1
+/usr/local/qcloud/irq/virtio_blk_smp_affinity.sh > /tmp/virtio_blk_affinity.log 2>&1
+/usr/local/qcloud/gpu/nv_gpu_conf.sh >/tmp/nv_gpu_conf.log 2>&1
+/usr/bin/runner_wspaces rgeiges runner_star
